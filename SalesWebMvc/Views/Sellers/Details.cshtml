@@ -3,11 +3,10 @@
 @{
     ViewData["Title"] = "Details";
 }
-
-<h2>@ViewData["Title"]</h2>
+<hr />
+<h2>@ViewData["Title"] of the seller</h2>
 
 <div>
-    <h4>Seller</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -40,7 +39,8 @@
         <dd>
             @Html.DisplayFor(model => model.Department.Name)
         </dd>
-    </dl>    
+    </dl>
+    <hr />
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success">Edit</a>

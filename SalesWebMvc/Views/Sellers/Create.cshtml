@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Create Seller";
 }
-
+<hr />
 <h2>@ViewData["Title"]</h2>
 
 <hr />
@@ -35,7 +35,8 @@
                 <select asp-for="Seller.DepartmentId" asp-items="@(new SelectList(Model.Departments,"Id","Name"))" class="form-control"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-default">Cancel</a>
             </div>
         </form>
     </div>
