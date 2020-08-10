@@ -55,5 +55,16 @@ namespace SalesWebMvc.Services
                 .GroupBy(x => x.Seller.Department)
                 .ToListAsync();
         }
+
+        public List<Seller> FindAllSellers()
+        {
+            return _context.Seller.ToList();
+        }
+
+        public void InsertSeller(SalesRecord salesRecord)
+        {
+            _context.SalesRecord.Add(salesRecord);
+            _context.SaveChanges();
+        }
     }
 }

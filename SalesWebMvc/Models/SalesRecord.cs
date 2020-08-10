@@ -13,6 +13,8 @@ namespace SalesWebMvc.Models
 
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public double Amount { get; set; }
+
+        [EnumDataType(typeof(SaleStatus))]
         public SaleStatus Status{ get; set; }
         public Seller Seller { get; set; }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers
@@ -51,6 +52,13 @@ namespace SalesWebMvc.Controllers
             ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
             var result = await _salesRecordService.FindByDateGroupingAsync(minDate, maxDate);
             return View(result);
+        }
+
+        public IActionResult InsertSale()
+        {
+            var sellers = _salesRecordService.FindAllSellers();
+            var viewModel = new SellersViewModel { Sellers = sellers };            
+            return View(viewModel);
         }
     }
 }
