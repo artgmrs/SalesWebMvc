@@ -17,6 +17,16 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
+        public List<SalesRecord> FindLast()
+        {
+            var result = from obj in _context.SalesRecord select obj;
+            var listCount = _context.SalesRecord.Count();
+            result
+                .Include(x => x.Seller)
+                .ToList();
+            return result.Skip(listCount - 5).Take(5).ToList();   
+        }
+
         public async Task<List<SalesRecord>> FindByDateAsync(DateTime? minDate, DateTime? maxDate)
         {
             var result = from obj in _context.SalesRecord select obj;
@@ -56,12 +66,7 @@ namespace SalesWebMvc.Services
                 .ToListAsync();
         }
 
-        public List<Seller> FindAllSellers()
-        {
-            return _context.Seller.ToList();
-        }
-
-        public void InsertSeller(SalesRecord salesRecord)
+        public void InsertSale(SalesRecord salesRecord)
         {
             _context.SalesRecord.Add(salesRecord);
             _context.SaveChanges();

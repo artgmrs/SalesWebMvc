@@ -12,14 +12,17 @@ namespace SalesWebMvc.Controllers
     public class SalesRecordsController : Controller
     {
         private readonly SalesRecordService _salesRecordService;
+        private readonly SellerService _sellerService;
 
-        public SalesRecordsController(SalesRecordService salesRecordService)
+        public SalesRecordsController(SalesRecordService salesRecordService, SellerService sellerService)
         {
             _salesRecordService = salesRecordService;
+            _sellerService = sellerService;
         }
         public IActionResult Index()
         {
-            return View();
+            var list = _salesRecordService.FindLast();
+            return View(list);
         }
 
         public async Task<IActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate)
@@ -54,11 +57,26 @@ namespace SalesWebMvc.Controllers
             return View(result);
         }
 
-        public IActionResult InsertSale()
+        public async Task<IActionResult> InsertSale()
         {
-            var sellers = _salesRecordService.FindAllSellers();
+            var sellers = await _sellerService.FindAllAsync();
             var viewModel = new SellersViewModel { Sellers = sellers };            
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> InsertSale(SalesRecord saleRecord)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                var sellers = await _sellerService.FindAllAsync();
+                var viewModel = new SellersViewModel { Sellers = sellers };
+                return View(viewModel);
+            }
+            _salesRecordService.InsertSale(saleRecord);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
