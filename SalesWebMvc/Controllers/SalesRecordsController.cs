@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SalesWebMvc.Data;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.Enums;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 
@@ -13,16 +15,36 @@ namespace SalesWebMvc.Controllers
     {
         private readonly SalesRecordService _salesRecordService;
         private readonly SellerService _sellerService;
+        private readonly SalesWebMvcContext _context;
 
-        public SalesRecordsController(SalesRecordService salesRecordService, SellerService sellerService)
+        public SalesRecordsController(SalesRecordService salesRecordService, SellerService sellerService, SalesWebMvcContext context)
         {
             _salesRecordService = salesRecordService;
             _sellerService = sellerService;
+            _context = context;
         }
         public IActionResult Index()
         {
             var list = _salesRecordService.FindLast();
             return View(list);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var saleRecord = _context.SalesRecord.Find(id);
+            if (saleRecord == null)
+            {
+                return NotFound();
+            }
+
+            var list = await _sellerService.FindAllAsync();
+            var viewModel = new SaleRecordViewModel { Sellers = list, SaleRecord = saleRecord};
+            return View(viewModel);            
         }
 
         public async Task<IActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate)
@@ -60,7 +82,7 @@ namespace SalesWebMvc.Controllers
         public async Task<IActionResult> InsertSale()
         {
             var sellers = await _sellerService.FindAllAsync();
-            var viewModel = new SellersViewModel { Sellers = sellers };            
+            var viewModel = new SaleRecordViewModel { Sellers = sellers };            
             return View(viewModel);
         }
 
@@ -72,7 +94,7 @@ namespace SalesWebMvc.Controllers
             if (!ModelState.IsValid)
             {
                 var sellers = await _sellerService.FindAllAsync();
-                var viewModel = new SellersViewModel { Sellers = sellers };
+                var viewModel = new SaleRecordViewModel { Sellers = sellers };
                 return View(viewModel);
             }
             _salesRecordService.InsertSale(saleRecord);

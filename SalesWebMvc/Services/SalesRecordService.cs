@@ -17,14 +17,23 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
-        public List<SalesRecord> FindLast()
+        public IList<SalesRecord> FindLast()
         {
-            var result = from obj in _context.SalesRecord select obj;
-            var listCount = _context.SalesRecord.Count();
-            result
-                .Include(x => x.Seller)
-                .ToList();
-            return result.Skip(listCount - 5).Take(5).ToList();   
+            //var result = from obj in _context.SalesRecord  orderby obj.Date ascending select obj ;
+            //var listCount = _context.SalesRecord.Count();
+
+            //result
+            //    .AsNoTracking()
+            //    .Include(x => x.Seller)
+            //    .Skip(listCount - 5)
+            //    .Take(5)
+            //    .AsEnumerable()
+            //    .ToList();
+
+            return _context.SalesRecord
+                .AsNoTracking()
+                .Include(sales => sales.Seller)
+                .OrderByDescending(o => o.Date).Take(5).ToList();
         }
 
         public async Task<List<SalesRecord>> FindByDateAsync(DateTime? minDate, DateTime? maxDate)

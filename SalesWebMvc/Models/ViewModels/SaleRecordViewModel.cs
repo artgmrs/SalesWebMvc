@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SalesWebMvc.Models.ViewModels
 {
-    public class SellersViewModel
+    public class SaleRecordViewModel
     {
         public ICollection<Seller> Sellers { get; set; }
 
