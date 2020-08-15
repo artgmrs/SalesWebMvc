@@ -12,29 +12,29 @@
     <div class="col-md-4">
         <form asp-action="InsertSale">
             <div class="form-group">
-                <label asp-for="SaleRecord.Date" class="control-label"></label>
-                <input asp-for="SaleRecord.Date" class="form-control" />
-                <span asp-validation-for="SaleRecord.Date" class="text-danger"></span>
+                <label asp-for="SalesRecord.Date" class="control-label"></label>
+                <input asp-for="SalesRecord.Date" class="form-control" name="Date" />
+                <span asp-validation-for="SalesRecord.Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SaleRecord.Amount" class="control-label"></label>
-                <input asp-for="SaleRecord.Amount" class="form-control" />
-                <span asp-validation-for="SaleRecord.Amount" class="text-danger"></span>
+                <label asp-for="SalesRecord.Amount" class="control-label"></label>
+                <input asp-for="SalesRecord.Amount" class="form-control" name="Amount"/>
+                <span asp-validation-for="SalesRecord.Amount" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="SaleRecord.Status" class="control-label"></label>
-                <select asp-for="SaleRecord.Status" asp-items="Html.GetEnumSelectList<SalesWebMvc.Models.Enums.SaleStatus>()" class="form-control">
+                <label asp-for="SalesRecord.Status" class="control-label"></label>
+                <select asp-for="SalesRecord.Status" asp-items="Html.GetEnumSelectList<SalesWebMvc.Models.Enums.SaleStatus>()" class="form-control" name="Status">
                     <option selected="selected" value="">Please select</option>
                 </select>
-                <span asp-validation-for="SaleRecord.Status" class="text-danger" />
+                <span asp-validation-for="SalesRecord.Status" class="text-danger" />
             </div>
             <div class="form-group">
-                <label asp-for="SaleRecord.SellerId" class="control-label"></label>
-                <select asp-for="SaleRecord.SellerId" asp-items="@(new SelectList(Model.Sellers,"Id","Name"))" class="form-control">
+                <label asp-for="SalesRecord.SellerId" class="control-label"></label>
+                <select asp-for="SalesRecord.SellerId" asp-items="@(new SelectList(Model.Seller,"Id","Name"))" class="form-control" name="SellerId">
                     <option selected="selected" value="">Please select</option>
                 </select>
-                <span asp-validation-for="SaleRecord.Seller" class="text-danger"></span>
+                <span asp-validation-for="SalesRecord.Seller" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="InsertSale" class="btn btn-default" />

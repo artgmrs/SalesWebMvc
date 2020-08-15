@@ -36,15 +36,56 @@ namespace SalesWebMvc.Controllers
                 return NotFound();
             }
 
-            var saleRecord = _context.SalesRecord.Find(id);
+            SalesRecord saleRecord = await _salesRecordService.FindByIdAsync(id.Value);
             if (saleRecord == null)
             {
                 return NotFound();
             }
 
-            var list = await _sellerService.FindAllAsync();
-            var viewModel = new SaleRecordViewModel { Sellers = list, SaleRecord = saleRecord};
-            return View(viewModel);            
+            List<Seller> list = await _sellerService.FindAllAsync();
+            SaleRecordViewModel viewModel = new SaleRecordViewModel{ Seller = list, SalesRecord = saleRecord};
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Edit(int id, SalesRecord sr)
+        {
+            if (!ModelState.IsValid)
+            {
+                var list = await _sellerService.FindAllAsync();
+                var viewModel = new SaleRecordViewModel { Seller = list, SalesRecord = sr};
+                return View(list);
+            }
+            if (id != sr.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _salesRecordService.UpdateAsync(sr);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException)
+            {
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = await _salesRecordService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                return BadRequest();
+            }
+            return View(obj);
         }
 
         public async Task<IActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate)
@@ -82,7 +123,7 @@ namespace SalesWebMvc.Controllers
         public async Task<IActionResult> InsertSale()
         {
             var sellers = await _sellerService.FindAllAsync();
-            var viewModel = new SaleRecordViewModel { Sellers = sellers };            
+            var viewModel = new SaleRecordViewModel { Seller = sellers };            
             return View(viewModel);
         }
 
@@ -94,7 +135,7 @@ namespace SalesWebMvc.Controllers
             if (!ModelState.IsValid)
             {
                 var sellers = await _sellerService.FindAllAsync();
-                var viewModel = new SaleRecordViewModel { Sellers = sellers };
+                var viewModel = new SaleRecordViewModel { Seller = sellers };
                 return View(viewModel);
             }
             _salesRecordService.InsertSale(saleRecord);

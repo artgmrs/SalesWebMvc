@@ -18,7 +18,7 @@ namespace SalesWebMvc.Models
         [EnumDataType(typeof(SaleStatus))]
         public SaleStatus Status { get; set; }
                 
-        public Seller Seller { get; set; }
+        public virtual Seller Seller { get; set; }
         public int SellerId { get; set; }
 
         public SalesRecord()
