@@ -81,7 +81,7 @@ namespace SalesWebMvc
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=SalesRecords}/{action=Index}/{id?}");
             });
         }
     }
