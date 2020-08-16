@@ -6,3 +6,4 @@
 - Entity FrameWork;
 - MySQL;
 - C# With Razor engine.
+- Bootstrap for visual.
